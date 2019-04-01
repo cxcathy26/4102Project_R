@@ -4,7 +4,6 @@ outFile <- 'output.txt'
 x <- readChar(fileName, file.info(fileName)$size)
 
 
-flag <- 0
 
 con = file(fileName, "r")
 
@@ -15,26 +14,33 @@ numWords <-0
 
 #NEED TO SPLIT EVERY LINE IN THE FILE TH
 for(m in line){
+flag = 0
 line_split <- strsplit(m, "")[[1]]
   for (n in line_split){ #ITERATES THROUGH EVERY CHARACTER IN A LINE
+    ascii <- utf8ToInt(n) 
+    hit <- 0
     if (flag ==0){
-      print(n) #n is the character 
-      ascii <- strtoi(charToRaw(n)) #I DONT THINK THIS IS ASCII 
-      print(ascii)
       if ((ascii >96 & ascii < 123) || (ascii >64 & ascii < 91)){
         flag <- 1; 
+        print(n)
       }
     }
     else {
       if ((ascii >96 & ascii < 123) || (ascii >64 & ascii < 91) || (ascii >47 & ascii < 58) || (ascii ==45) || (ascii == 95)){
-        
+        print(ascii)
       }else{
         numWords <- numWords + 1;
-        flag <- 0;
+        print(paste0("word found ", numWords))
+        flag <- 0
+        hit <-1
       }
     }
   }
-  totalWords <- totalWords + numWords; 
+  if (hit != 1){
+    numWords <- numWords + 1;
+    print(paste0("word found ", numWords))
+  }
+  #totalWords <- totalWords + numWords; 
 }
     #
     #NEED TO GET ASCII VALUE OF N 
@@ -53,7 +59,7 @@ numChars <- as.numeric(nchar(chars))
 #------------------------------------------------
 #Counting number of words
 
-print(totalWords)
+print(numWords)
 print(numChars)
 print(lineCount)
 
