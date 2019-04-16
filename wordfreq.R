@@ -1,37 +1,37 @@
 fileName <- 'input.txt'
 outFile <- 'output.txt'
 
-con = file(fileName, "r")
+con = file(fileName, "r") 
 
-sentences <-readLines(con)
+sentences <-readLines(con) # read lines
 scan("input.txt","character",sep="\n")
 
-sentences<-gsub("([_-])|[[:punct:]]","\\1",sentences)
-sentences<-gsub("\\.","",sentences)
-print(sentences)
+#USES REGULAR EXPRESSIONS TO IDENTIFY WORDS
+#sentences<-gsub("\\."," ",sentences) #regular expression that 
+sentences<-gsub("([_-])|[[:punct:]]","\\1\\2#",sentences) #regular expression that gets rid of extra punctuation characters in the input besides _ or -
+sentences<-gsub("_#","_",sentences) #regular expression to keep _
+sentences<-gsub("-#","-",sentences) #regular expression to keep -
+sentences<-gsub("#"," ",sentences) #regular expression to separate words with unwanted characters in between 
 sentences <- gsub("^[[:digit:]]+" , "", sentences) #removes digits in front of word
 print(sentences)
-sentences <- gsub("^-+" , "",sentences)
-sentences <- gsub("^_+" , "",sentences) #is regular expression
-#sentences[!sapply(sentences, identical, character(0))]
-newsen <- unlist(strsplit(sentences, "\ "))
+sentences <- gsub("^-+" , "",sentences) #removes _ in the front of a word
+sentences <- gsub("^_+" , "",sentences) #regular expression to remove - at the start of a word
 
-print(newsen)
-newsen <- gsub("^[[:digit:]]*" , "", newsen) #removes digits in front of word
-newsen <- gsub("^-+" , " ", newsen)
-newsen <- gsub("^_+" , " ", newsen) #is regular expression
-#print(newsen)
-#newsen <- gsub("[[:blank:]]*" , " ", newsen)
-#sentences <- paste(newsen, sep= " ")
+newsen <- unlist(strsplit(sentences, "\ ")) #splits each line into words
+
+for (i in 1:20) { #assumes word has maximum 20 characters 
+  newsen <- gsub("^[[:digit:]]*", "", newsen) #removes digits in front of words
+  newsen <- gsub("^-+" , "", newsen) #remove _ at start of words
+  newsen <- gsub("^_+" , "", newsen) #remove - at start of words
+}
+
+newsen <- gsub("[[:blank:]]" , "", newsen)
 
 #-----------------------------------------------------------
 #-----------------------------------------------------------
-#NEED TO DISCARD - _ OR NUM IF THE WORD STARTS WITH THEM 
-#probably using SUB() , subs for one occurence
-#use it within an if statement
 
 #Split sentence
 word_counts <- as.data.frame(table(unlist( strsplit(newsen, "\ ") )))  # split vector by space
-
+colnames(word_counts) <- c("Word", "Freq")
 print(word_counts)
 close(con)
